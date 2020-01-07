@@ -10,8 +10,8 @@ OperationID: `list_tenants`
 ```
  ./test-client.rb --api-class="TenantApi" --operation="list_tenants" --host=http://localhost:3000/api/catalog/v1.0 --scheme=http
 ```
-API: 'ServicePlansApi'
-OperationID: 'show_service_plans'
+API: `ServicePlansApi`
+OperationID: `show_service_plans`
 ```
 ./test-client.rb --api-class="ServicePlansApi" --operation="show_service_plan_base" --host=http://localhost:3000/api/catalog/v1.0 --scheme=http --id="5"
 ```
