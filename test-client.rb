@@ -15,11 +15,13 @@ opts = Optimist::options do
   opt :password, "Insights password", :type => :string, :default => "redhat"
   opt :api_class, "Api to connect to", :type => :string, :default => "PortfolioApi"
   opt :operation, "Api operation ID", :type => :string, :default => "list_portfolios"
+  opt :id, "Api operation param id", :type => :string
 end
 
 p opts
 
-X_RH_IDENTITY = "eyJlbnRpdGxlbWVudHMiOnsiaHlicmlkX2Nsb3VkIjp7ImlzX2VudGl0bGVkIjp0cnVlfSwiaW5zaWdodHMiOnsiaXNfZW50aXRsZWQiOnRydWV9LCJvcGVuc2hpZnQiOnsiaXNfZW50aXRsZWQiOnRydWV9LCJzbWFydF9tYW5hZ2VtZW50Ijp7ImlzX2VudGl0bGVkIjp0cnVlfX0sImlkZW50aXR5Ijp7ImFjY291bnRfbnVtYmVyIjoiMDM2OTIzMyIsInR5cGUiOiJVc2VyIiwidXNlciI6eyJ1c2VybmFtZSI6Impkb2UiLCJlbWFpbCI6Impkb2VAYWNtZS5jb20iLCJmaXJzdF9uYW1lIjoiSm9obiIsImxhc3RfbmFtZSI6IkRvZSIsImlzX2FjdGl2ZSI6dHJ1ZSwiaXNfb3JnX2FkbWluIjpmYWxzZSwiaXNfaW50ZXJuYWwiOmZhbHNlLCJsb2NhbGUiOiJlbl9VUyJ9LCJpbnRlcm5hbCI6eyJvcmdfaWQiOiIzMzQwODUxIiwiYXV0aF90eXBlIjoiYmFzaWMtYXV0aCIsImF1dGhfdGltZSI6NjMwMH19fQ=="
+# dbomhof@redhat.com external_tenant id: 1460290
+X_RH_IDENTITY = "eyJlbnRpdGxlbWVudHMiOnsiaW5zaWdodHMiOnsiaXNfZW50aXRsZWQiOnRydWV9LCJtaWdyYXRpb25zIjp7ImlzX2VudGl0bGVkIjp0cnVlfSwiaHlicmlkX2Nsb3VkIjp7ImlzX2VudGl0bGVkIjp0cnVlfSwib3BlbnNoaWZ0Ijp7ImlzX2VudGl0bGVkIjp0cnVlfSwic21hcnRfbWFuYWdlbWVudCI6eyJpc19lbnRpdGxlZCI6dHJ1ZX0sImFuc2libGUiOnsiaXNfZW50aXRsZWQiOnRydWV9fSwiaWRlbnRpdHkiOnsiaW50ZXJuYWwiOnsiYXV0aF90aW1lIjowLCJhdXRoX3R5cGUiOiJqd3QtYXV0aCIsIm9yZ19pZCI6IjYzNDAwNTYifSwiYWNjb3VudF9udW1iZXIiOiIxNDYwMjkwIiwidXNlciI6eyJmaXJzdF9uYW1lIjoiRHJldyIsImlzX2FjdGl2ZSI6dHJ1ZSwiaXNfaW50ZXJuYWwiOnRydWUsImxhc3RfbmFtZSI6IkJvbWhvZiIsImxvY2FsZSI6ImVuX1VTIiwiaXNfb3JnX2FkbWluIjpmYWxzZSwidXNlcm5hbWUiOiJkYm9taG9mQHJlZGhhdC5jb20iLCJlbWFpbCI6ImRib21ob2YrcWFAcmVkaGF0LmNvbSJ9LCJ0eXBlIjoiVXNlciJ9fQ=="
 
 X_RH_INSIGHTS_REQUEST_ID = "gobbledygook"
 ORIGINAL_URL = "http://whatever.com"
@@ -36,7 +38,11 @@ response = nil
 
 begin
   api_instance.api_client.default_headers = {:x_rh_identity => X_RH_IDENTITY, :x_rh_insights_request_id => X_RH_INSIGHTS_REQUEST_ID, :original_url => ORIGINAL_URL }
-  response = api_instance.send(opts[:operation])
+  if opts[:id]
+    response = api_instance.send(opts[:operation], opts[:id])
+  else
+    response = api_instance.send(opts[:operation])
+  end
 rescue CatalogApiClientRuby::ApiError => e
   puts "Exception when calling #{opts[:api_class]}->#{opts[:operation]}: #{e}"
 end
