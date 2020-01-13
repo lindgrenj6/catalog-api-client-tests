@@ -2,6 +2,10 @@
 ```
 openapi-generator generate -i public/doc/openapi-3-v1.0.0.json -g ruby -o /tmp/test -c config.json
 ```
+OR if you would rather just run a container than install the openapi-generator:
+```
+FILE=public/doc/openapi-3-v1.0.0.json OUTPUT=/tmp/test ./generate.sh
+```
 ## Examples
 ### Run a OpenAPI catalog-api client lookup against a local running instance
 API: `TenantApi`
